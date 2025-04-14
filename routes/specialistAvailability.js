@@ -5,20 +5,34 @@ import SpecialistAvailability from '../models/SpecialistAvailability.js';
 const router = express.Router();
 
 // POST request to create a new specialist's availability
-router.post('/', async (req, res) => {
-    const { specialist_id, days_of_week, start_time, end_time } = req.body;
+router.post('/update', async (req, res) => {
+
+    // const { specialist_id } = req.body;
+    const specialist_id = 1;
+    let availabilities;
+    for(let day in req?.body){
+        const enabled = req.body[day].enabled;
+        for(let range of req.body[day].ranges){
+            try {              
+                availabilities = await SpecialistAvailability.upsert({
+                    specialist_id: 1,
+                    day,
+                    enabled,
+                    start: range.start,
+                    end: range.end,
+                });
+            
+            } catch (error) {
+                console.error(error);
+               return res.status(500).json({ message: 'Error creating specialist availability' });
+            }
+
+             }
     
-    try {
-        const availability = await SpecialistAvailability.create({
-            specialist_id,
-            days_of_week,
-            start_time,
-            end_time
-        });
-        res.status(201).json(availability);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error creating specialist availability' });
+    }
+    const results = await availabilities.toJSON();
+    if (results.length > 0) {
+        return res.status(201).json({results});
     }
 });
 

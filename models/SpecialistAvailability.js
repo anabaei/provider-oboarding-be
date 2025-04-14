@@ -12,21 +12,32 @@ const SpecialistAvailability = connection.define('SpecialistAvailability', {
         },
         onDelete: 'CASCADE',
     },
-    days_of_week: {
+    enabled:{
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        defaultValue: true
+    },
+    day: {
         type: Sequelize.STRING, // Use a string like "Mon, Tue, Wed" or a JSON array
         allowNull: false,
     },
     start_time: {
         type: Sequelize.TIME,
-        allowNull: false,
+        allowNull: true,
     },
     end_time: {
         type: Sequelize.TIME,
-        allowNull: false,
-    }
+        allowNull: true,
+    },
 }, {
     tableName: 'specialist_availabilities',
     timestamps: false,
+    indexes: [
+        {
+          unique: true,
+          fields: ['specialist_id', 'day']  // Ensure uniqueness of the combination of specialityId and day
+        }
+      ]
 });
 
 export default SpecialistAvailability;

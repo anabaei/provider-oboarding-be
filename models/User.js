@@ -17,6 +17,7 @@ const User = connection.define('User', {
     name: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: false,
     },
     email: {
         type: Sequelize.STRING,
@@ -33,6 +34,7 @@ const User = connection.define('User', {
     clinic_id: {
         type: Sequelize.INTEGER,
         allowNull: true,  // Clinic ID should be null for clients
+        unique: false,
     },
     created_at: {
         type: Sequelize.DATE,

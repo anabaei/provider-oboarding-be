@@ -11,7 +11,7 @@ router.post("/", async (req, res, next) => {
     const { company_name, company_code, main_contact, website, email, phone, image, location } = req.body;
 
     try {
-        const newOrganization = await connection.models.Organization.create({
+        const newOrganization = await connection.models.Organization.upsert({
             user_id: userId,
             company_name,
             company_code,
@@ -22,7 +22,19 @@ router.post("/", async (req, res, next) => {
             image,
             location,
         });
-        return res.json(newOrganization);
+        const clinic = await connection.models.Clinic.upsert({
+            clinic_name: "Main Clinic",
+            org_id: newOrganization.org_id,
+            clinic_code: "MC",  // You can generate a unique code
+            main_contact,
+            website,
+            email,
+            phone,
+            image,
+            location,
+        });
+        
+        return clinic[0].clinic_id;
     } catch (error) {
         return next(error);
     }

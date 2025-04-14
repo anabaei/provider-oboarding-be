@@ -54,7 +54,6 @@ const Specialist = connection.define('Specialist', {
 // Define the relationship between Specialist and Clinic (foreign key)
 Specialist.belongsTo(Clinic, {
     foreignKey: 'clinic_id',   // FK in Specialist table
-    targetKey: 'clinic_id',    // PK in Clinic table
     onDelete: 'CASCADE',       // Action when the clinic is deleted
 });
 
