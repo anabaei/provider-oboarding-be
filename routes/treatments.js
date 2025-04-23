@@ -44,7 +44,8 @@ router.get('/:clinic_id', async (req, res) => {
         });
 
         if (!treatments.length) {
-            return res.status(404).json({ message: 'No treatments found for this clinic' });
+            console.log('No treatments found for this clinic');
+         //   return res.status(404).json({ message: 'No treatments found for this clinic' });
         }
 
         res.status(200).json(treatments);
